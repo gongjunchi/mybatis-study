@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <typeAlias type="org.zuel.entity.User" alias="User"/>
+        <typeAlias type="org.zuel.entity.Account" alias="Account"/>
+    </typeAliases>
+    
+    <environments default="default">
+        <environment id="default">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://114.215.171.208:3306/gongjc_course?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="Zuel2019@"/>
+            </dataSource>
+        </environment>
+        <!--可以配置多个env id区分 default配置决定默认使用哪个-->
+<!--        <environment id="">-->
+<!--            <transactionManager type=""></transactionManager>-->
+<!--            <dataSource type=""></dataSource>-->
+<!--        </environment>-->
+    </environments>
+
+    <mappers>
+        <!--支持两种方式，mapper标签注册单个XML文件，package标签注册包目录下的所有XML文件-->
+        <mapper resource="UserDAOMapper.xml"/>
+        <mapper resource="AccountDAOMapper.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zuel.dao.UserDAO">
+
+    <!--parameterType应该写全路径，但可以在mybatis-config里配置别名-->
+<!--    <insert id="save" parameterType="User">-->
+<!--        insert into user (name) values (#{name})-->
+<!--    </insert>-->
+
+    <!--可以通过databaseId属性实现多数据源，如果不写则使用的是默认数据源-->
+    <select id="queryAllUsers" resultType="User" useCache="true">
+        select id,name from user
+    </select>
+
+
+</mapper>
