@@ -268,6 +268,94 @@ MyBatis 完成代理创建 核心类型 ---> DAO接口的实现类
 
 
 
+#### 4. 开发流程分析
+
+~~~markdown
+InputStream inputStream = Resources.getResourceAsStream("mybaits-config.xml");
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    1. 解析 mybatis-config.xml ---->  Configuration 对象 
+            xPathParser  XNode  ---->  Configuration
+            build() --> parseConfiguration(parser.evalNode("/configuration"));
+      xPathParser XNode ---> MappedStatement ---> namespace.id  
+                                                           并且把MappedStatment 存放在了 Configution中
+             parseConfiguration-->mapperElement(root.evalNode("mappers"));
+                                                          XMLMapperBuilder mapperParser = new XMLMapperBuilder();
+                                 mapperParser.parse();                            
+                                                                    configurationElement(parser.evalNode("/mapper"));
+                                                                             statementParser.parseStatementNode();
+                                                                                 builderAssistant.addMappedStatement
+                                                                                    MappedStatement statement = statementBuilder.build();
+                                           configuration.addMappedStatement(statement);
+    2. new DefaultSqlSessionFactory(Configuration); ---> SqlSession
+
+
+    SqlSession sql = sqlSessionFactory.openSession();        
+           final Environment environment = configuration.getEnvironment();   
+   final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+    tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
+    final Executor executor = configuration.newExecutor(tx, execType);
+    return new DefaultSqlSession(configuration, executor, autoCommit);
+~~~
+
+InputStream inputStream = Resources.getResourceAsStream("mybaits-config.xml");
+
+~~~markdown
+IO方式 打开输入流 获取 mybatis-config.xml及xxxxMapper.xml
+InputStream inputStream = Resources.getResourceAsStream("mybaits-config.xml");
+因为mybatis-config.xml中也配置了mapper文件的路径，所以二者都读到了（尽可能通过一次IO读到所有需要的信息）
+
+读完配置文件后，mybatis如何处理所读取的配置信息呢？读到虚拟机中以什么形式展现？
+
+类比：ORM&OXM 一切皆对象
+			ORM
+Object	Relationship	Mapping
+对象			表		映射（对应）
+			OXM
+Object		XML			Mapping
+对象		XML文件		映射（对应）
+
+   	mybatis-config.xml  ---- Configuration对象 
+    程序如何将xml封装成对象？
+    Java：XML解析 
+                  读取xml相关的内容，获得标签的内容后，封装Java对象 
+                  XML解析几种方式：DOM SAX XPath(Mybatis使用) 
+                  Mybatis进行XML解析时，封装了两个对象：
+                  		XPathParser（读取和分析XML） ---> XNode（对应XML文件标签） 
+                       
+                  1）XPathParser读取分析XML文件 
+
+                  	inputStream ---- xxx.xml 
+                   	XPathParser xpathParser = new XPathParser(inputStream);
+                   	xpathParser.evalNodes("/xxxxx") ---> XNode ---> 标签的名字 标签的属性 标签内容 
+~~~
+
+
+
+UserDAO userDAO = SqlSession.getMapper(UserDAO.class);
+
+~~~markdown
+SqlSession.getMapper() ---->  动态代理 ----  DAO接口的实现类
+1. MapperProxyFactory (JDK创建代理，需要InvocationHandler的实现）
+          |-> InvocationHandler ---> MapperProxy
+                       SqlCommand
+                                  |- type [insert|update|delete|select]
+                                  |- name  namespace.id
+                       MethodSignatrue 
+                                  |-方法的返回值
+                                  |-参数 
+                                  |--->  sqlSession.update()
+                                              |- Executor (SimpleExecutor ReuseExecutor BatchExecutor)
+                                                     |- StatementHandler
+                                                                 |-ParameterHandler  ResultSetHandler
+                                                                               TypeHandler 
+                              
+                                         sqlSession.delete()
+                                         sqlSession.select()
+~~~
+
+userDAO.save()
+userDAO.query()
+
 
 
 
