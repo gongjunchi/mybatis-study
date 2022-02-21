@@ -270,33 +270,6 @@ MyBatis 完成代理创建 核心类型 ---> DAO接口的实现类
 
 #### 4. 开发流程分析
 
-~~~markdown
-InputStream inputStream = Resources.getResourceAsStream("mybaits-config.xml");
-SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-    1. 解析 mybatis-config.xml ---->  Configuration 对象 
-            xPathParser  XNode  ---->  Configuration
-            build() --> parseConfiguration(parser.evalNode("/configuration"));
-      xPathParser XNode ---> MappedStatement ---> namespace.id  
-                                                           并且把MappedStatment 存放在了 Configution中
-             parseConfiguration-->mapperElement(root.evalNode("mappers"));
-                                                          XMLMapperBuilder mapperParser = new XMLMapperBuilder();
-                                 mapperParser.parse();                            
-                                                                    configurationElement(parser.evalNode("/mapper"));
-                                                                             statementParser.parseStatementNode();
-                                                                                 builderAssistant.addMappedStatement
-                                                                                    MappedStatement statement = statementBuilder.build();
-                                           configuration.addMappedStatement(statement);
-    2. new DefaultSqlSessionFactory(Configuration); ---> SqlSession
-
-
-    SqlSession sql = sqlSessionFactory.openSession();        
-           final Environment environment = configuration.getEnvironment();   
-   final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
-    tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
-    final Executor executor = configuration.newExecutor(tx, execType);
-    return new DefaultSqlSession(configuration, executor, autoCommit);
-~~~
-
 InputStream inputStream = Resources.getResourceAsStream("mybaits-config.xml");
 
 ~~~markdown
@@ -327,6 +300,32 @@ Object		XML			Mapping
                   	inputStream ---- xxx.xml 
                    	XPathParser xpathParser = new XPathParser(inputStream);
                    	xpathParser.evalNodes("/xxxxx") ---> XNode ---> 标签的名字 标签的属性 标签内容 
+~~~
+
+SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+~~~markdown
+1. 解析 mybatis-config.xml ---->  Configuration 对象 
+		xPathParser  XNode  ---->  Configuration
+		build() --> parseConfiguration(parser.evalNode("/configuration"));
+      		xPathParser XNode ---> MappedStatement ---> namespace.id  
+                                                           并且把MappedStatment 存放在了 Configution中			parseConfiguration-->mapperElement(root.evalNode("mappers"));
+                                                          XMLMapperBuilder mapperParser = new XMLMapperBuilder();
+                                 mapperParser.parse();                            
+                                                                    configurationElement(parser.evalNode("/mapper"));
+                                                                             statementParser.parseStatementNode();
+                                                                                 builderAssistant.addMappedStatement
+                                                                                    MappedStatement statement = statementBuilder.build();
+                                           configuration.addMappedStatement(statement);
+    2. new DefaultSqlSessionFactory(Configuration); ---> SqlSession
+
+
+    SqlSession sql = sqlSessionFactory.openSession();        
+           final Environment environment = configuration.getEnvironment();   
+   final TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);
+    tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);
+    final Executor executor = configuration.newExecutor(tx, execType);
+    return new DefaultSqlSession(configuration, executor, autoCommit);
 ~~~
 
 
