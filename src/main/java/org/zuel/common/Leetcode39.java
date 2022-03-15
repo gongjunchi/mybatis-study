@@ -13,19 +13,16 @@ public class Leetcode39 {
         // 排序后可以剪枝
         Arrays.sort(candidates);
         dfs(0, candidates, target);
-
         return res;
     }
 
     public void dfs(int begin, int[] candidates, int target) {
-//        if (target < 0) {
-//            return;
-//        }
         if (target == 0) {
             res.add(new ArrayList<>(temp));
             return;
         }
         for (int i = begin; i < candidates.length; i++) {
+            // 剪枝，如果再往下一层会造成target小于0，这一支不符合条件，直接剪掉
             if (target - candidates[i] < 0) {
                 break;
             }
