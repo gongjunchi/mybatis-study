@@ -1,7 +1,6 @@
 package org.zuel.common;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Offer07 {
 
@@ -43,6 +42,19 @@ public class Offer07 {
     }
 
     public static void main(String[] args) {
-        new Offer07();
+        Offer07 offer07 = new Offer07();
+        TreeNode root = offer07.buildTree(new int[]{-1}, new int[]{-1});
+        offer07.levelOrder(root);
+    }
+
+    public void levelOrder(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode temp = queue.poll();
+            System.out.print(temp.val);
+            queue.add(temp.left);
+            queue.add(temp.right);
+        }
     }
 }
