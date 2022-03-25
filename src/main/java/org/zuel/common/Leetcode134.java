@@ -30,6 +30,45 @@ public class Leetcode134 {
         return start;
     }
 
+    // 从暴力解法推导到优化解法
+    public int canCompleteCircuit1(int[] gas, int[] cost) {
+        int n = gas.length;
+        for (int i = 0; i < n; i++) {
+            int remain = gas[i];
+            // 用j标记从i出发能到达的最远点
+            int j = i;
+            while (remain - cost[j] >= 0) {
+                remain = remain - cost[j] + gas[(j + 1) % n] ;
+                j = (j + 1) % n;
+                if (j == i) {
+                    return i;
+                }
+            }
+            if (j < i) {
+                return -1;
+            }
+            // 如果i最远到j，下一步直接从i+1开始找
+            i = j;
+        }
+        return -1;
+    }
+
+    // o(N)时间复杂度
+    public int canCompleteCircuit2(int[] gas, int[] cost) {
+        int remain = 0;
+        int n = gas.length;
+        int minSpare = Integer.MAX_VALUE;
+        int start = 0;
+        for (int i = 0; i < n; i++) {
+            remain += gas[i] - cost[i];
+            if (remain < minSpare) {
+                minSpare = remain;
+                start = i;
+            }
+        }
+        return remain < 0 ? -1 : start % n;
+    }
+
     public static void main(String[] args) {
         Leetcode134 leetcode134 = new Leetcode134();
         System.out.println(leetcode134.canCompleteCircuit(new int[]{4,5,2,6,5,3}, new int[]{3,2,7,3,2,9}));
