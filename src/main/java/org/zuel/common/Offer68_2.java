@@ -2,6 +2,7 @@ package org.zuel.common;
 
 public class Offer68_2 {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 树的递归基本都是对root节点的操作
         if (root == null || root == p || root == q) {
             return root;
         }
