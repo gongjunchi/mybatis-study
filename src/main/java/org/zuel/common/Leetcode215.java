@@ -1,5 +1,8 @@
 package org.zuel.common;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 public class Leetcode215 {
 
     public int findKthLargest(int[] nums, int k) {
@@ -15,6 +18,32 @@ public class Leetcode215 {
             if (k == 0) {
                 res =  nums[heapSize];
                 break;
+            }
+        }
+        return res;
+    }
+
+    // 用已实现的数据结构
+    public int findKthLargest1(int[] nums, int k) {
+        // 用优先队列实现一个最大堆，PriorityQueue默认是一个最小堆
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        for (int i = 0; i < nums.length; i++) {
+            maxHeap.offer(nums[i]);
+        }
+        int res = 0;
+        k--;
+        while (!maxHeap.isEmpty()) {
+            if (k == 0) {
+                res =  maxHeap.poll();
+                break;
+            } else {
+                maxHeap.poll();
+                k--;
             }
         }
         return res;
@@ -50,6 +79,6 @@ public class Leetcode215 {
 
     public static void main(String[] args) {
         Leetcode215 leetcode215 = new Leetcode215();
-        System.out.println(leetcode215.findKthLargest(new int[]{1}, 1));
+        System.out.println(leetcode215.findKthLargest1(new int[]{3,2,1,5,6,4}, 2));
     }
 }
