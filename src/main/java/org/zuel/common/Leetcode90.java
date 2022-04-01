@@ -17,14 +17,15 @@ public class Leetcode90 {
     }
 
     // [1,2,2]
-    public void dfs(int cur, int[] nums) {
+    public void dfs(int start, int[] nums) {
         res.add(new ArrayList<>(tmp));
-        if (cur == nums.length) {
+        if (start == nums.length) {
             return;
         }
-        for (int i = cur; i < nums.length; i++) {
+        for (int i = start; i < nums.length; i++) {
             /*去重的重要步骤 保留第一次的相同值 跳过同一层的相同值*/
-            if (i > cur && nums[i - 1] == nums[i]) {
+            // 注意这里必须是i>start，否则第一次满足条件的树也将被剪掉
+            if (i > start && nums[i - 1] == nums[i]) {
                 continue;
             }
             tmp.add(nums[i]);

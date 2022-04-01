@@ -17,7 +17,7 @@ public class Leetcode78 {
     public void dfs(int cur, int[] nums) {
         // 数组遍历完毕，加入最终结果
         if (cur == nums.length) {
-            // 要赋值一份tmp
+            // 要复制一份tmp
             res.add(new ArrayList<>(tmp));
             return;
         }
@@ -29,6 +29,7 @@ public class Leetcode78 {
 
     public void dfs1(int cur, int[] nums) {
         res.add(new ArrayList<>(tmp));
+        // 可以不加判断
         if (cur == nums.length) {
             return;
         }
