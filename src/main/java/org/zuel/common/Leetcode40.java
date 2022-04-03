@@ -7,33 +7,38 @@ import java.util.List;
 
 public class Leetcode40 {
 
-    List<List<Integer>> res = new LinkedList<>();
-    List<Integer> temp = new LinkedList<>();
+    List<List<Integer>> res = new LinkedList<>();;
+    List<Integer> path = new LinkedList<>();
+    boolean[] used;
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        used = new boolean[candidates.length];
         Arrays.sort(candidates);
-        dfs(0, candidates, target);
+        dfs(candidates, 0, target);
         return res;
     }
 
-    public void dfs(int begin, int[] candidates, int target) {
+    // 回溯
+    public void dfs(int[] nums, int start, int target) {
         if (target == 0) {
-            res.add(new ArrayList<>(temp));
+            res.add(new ArrayList<>(path));
             return;
         }
-        for (int i = begin; i < candidates.length; i++) {
-            if (target - candidates[i] < 0) {
-                return;
-            }
-            // 同一层，如果同一个元素已经用过了，就不能再用
-            if (i > begin && candidates[i] == candidates[i - 1]) {
-                // 注意这里要让循环继续进行下去，因为可能有一个数直接满足条件的情况，比如5
+        for (int i = start; i < nums.length; i++) {
+            if (target < nums[i]) {
                 continue;
             }
-            temp.add(candidates[i]);
-//            System.out.println("递归之前 => " + temp + "，剩余 = " + (target - candidates[i]));
-            dfs(i + 1, candidates, target - candidates[i]);
-            temp.remove(temp.size() - 1);
-//            System.out.println("递归之后 => " + temp + "，剩余 = " + (target));
+//            if (i > 0 && nums[i] == nums[i-1] && !used[i-1]) {
+//                continue;
+//            }
+            // 另一种写法，同一层，如果同一个元素已经用过了，就不能再用
+            if (i > start && nums[i] == nums[i-1]) {
+                continue;
+            }
+            path.add(nums[i]);
+            used[i] = true;
+            dfs(nums, i + 1, target - nums[i]);
+            used[i] = false;
+            path.remove(path.size() - 1);
         }
     }
 
