@@ -40,10 +40,10 @@ public class ScannerExec {
     }
 
     public static void main(String[] args) {
-        ScannerExec exec = new ScannerExec();
-        List<List<Integer>> res = exec.combinationSum2(new int[]{2,5,2,1,2}, 5);
-        res.forEach(list -> {
-            System.out.println(list.toString());
-        });
+        int[] nums = new int[]{4,3,2,1};
+        Arrays.sort(nums, 1, nums.length);
+        for (int num : nums) {
+            System.out.println(num);
+        }
     }
 }
