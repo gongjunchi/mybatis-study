@@ -1,4 +1,4 @@
-package org.zuel.common;
+package org.zuel.exam;
 
 import java.util.Scanner;
 

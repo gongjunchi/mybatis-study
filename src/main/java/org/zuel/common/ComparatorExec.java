@@ -3,7 +3,7 @@ package org.zuel.common;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class ComparatorTest {
+public class ComparatorExec {
 
     public static void main(String[] args) {
         int[][] arr = new int[][]{{2, 2, 3},{2, 1, 2}};
