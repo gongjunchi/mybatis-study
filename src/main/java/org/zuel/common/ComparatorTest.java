@@ -6,14 +6,14 @@ import java.util.Comparator;
 public class ComparatorTest {
 
     public static void main(String[] args) {
-        int[][] arr = new int[][]{{4, 2, 3},{4, 1, 2}};
+        int[][] arr = new int[][]{{2, 2, 3},{2, 1, 2}};
         Arrays.sort(arr, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                if (o1[1] == o2[1]) {
-                    return o1[2] - o2[2];
-                } else {
+                if (o1[0] == o2[0]) {
                     return o1[1] - o2[1];
+                } else {
+                    return o1[0] - o2[0];
                 }
             }
         });
@@ -24,5 +24,6 @@ public class ComparatorTest {
             }
             System.out.println();
         }
+        System.out.printf("%.2f", 1.2345);
     }
 }

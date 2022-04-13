@@ -55,18 +55,17 @@ public class Leetcode134 {
 
     // o(N)时间复杂度
     public int canCompleteCircuit2(int[] gas, int[] cost) {
-        int remain = 0;
-        int n = gas.length;
-        int minSpare = Integer.MAX_VALUE;
-        int start = 0;
-        for (int i = 0; i < n; i++) {
-            remain += gas[i] - cost[i];
-            if (remain < minSpare) {
-                minSpare = remain;
-                start = i;
+        int len = gas.length;
+        // minIndex是油箱油量最少的时候，假定初始值为0
+        int curGas = 0, minGas = 0, minIndex = 0;
+        for (int i = 0; i < len; i++) {
+            curGas += gas[i] - cost[i];
+            if (curGas < minGas) {
+                minGas = curGas;
+                minIndex = i + 1;
             }
         }
-        return remain < 0 ? -1 : start % n;
+        return curGas < 0 ? -1 : minIndex;
     }
 
     public static void main(String[] args) {
