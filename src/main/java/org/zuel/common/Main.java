@@ -1,40 +1,27 @@
 package org.zuel.common;
 
-import java.text.NumberFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        // 天数
         int n = sc.nextInt();
-        int p = sc.nextInt();
+        // 初始资金
+        int m = sc.nextInt();
         sc.nextLine();
-        long[] nums = new long[2 * n];
-        for (int i = 0; i < 2 * n; i++) {
-            nums[i] = sc.nextLong();
+        int[] price = new int[n];
+        for (int i = 0; i < n; i++) {
+            price[i] = sc.nextInt();
         }
-        Arrays.sort(nums);
-        double res = 0;
-        double pValue = p * 0.01;
-        if (p > 50) {
-            for (int i = 0; i < n; i++) {
-                res += nums[i] * (1 - pValue) + nums[i+n] * pValue;
-            }
-        } else {
-            int i = 0;
-            while (i < 2 * n) {
-                res += nums[i] * (1 - pValue) + nums[i+1] * pValue;
-                i += 2;
+        int cash = m, stock = 0;
+        for (int i = 0; i < n - 1; i++) {
+            if (cash >= price[i] && price[i] < price[i+1]) {
+                cash += price[i + 1] - price[i];
             }
         }
-        if (res % 1 == 0) {
-            System.out.println(res);
-        } else {
-            NumberFormat nf = NumberFormat.getInstance();
-            nf.setGroupingUsed(false);
-            System.out.print(nf.format(res * 100));
-            System.out.print("%");
-        }
+        System.out.println(cash);
     }
 }
